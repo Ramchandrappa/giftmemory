@@ -302,6 +302,19 @@ dialog.sheet { margin: 0 0 0 auto; height: 100%; max-height: 100%; width: min(44
 #view > .stack > section { animation: gm-in .45s ease-out both; }
 #view > .stack > section:nth-child(2) { animation-delay: .06s; } #view > .stack > section:nth-child(3) { animation-delay: .12s; } #view > .stack > section:nth-child(4) { animation-delay: .18s; }
 
+/* ---------- emoji images (Noto) ---------- */
+img.gm-emo { width: 1.2em; height: 1.2em; object-fit: contain; vertical-align: -0.2em; display: inline-block; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+.pimg img.gm-emo { width: 72px; height: 72px; filter: drop-shadow(0 6px 8px rgba(37,26,51,.18)); }
+.cat i img.gm-emo { width: 46px; height: 46px; }
+.occtile i img.gm-emo { width: 40px; height: 40px; }
+.hero .art img.gm-emo { width: 54px; height: 54px; filter: drop-shadow(0 6px 10px rgba(0,0,0,.18)); }
+.story .se img.gm-emo { width: 64px; height: 64px; }
+.emo img.gm-emo { width: 34px; height: 34px; }
+.preview .emo img.gm-emo { width: 44px; height: 44px; }
+.rcard .ic img.gm-emo { width: 24px; height: 24px; }
+.logo .mark img.gm-emo { width: 24px; height: 24px; vertical-align: middle; }
+.tabs a span img.gm-emo { width: 22px; height: 22px; }
+
 @media (prefers-reduced-motion: reduce) {
   .toast, .rc .face, .pcard { transition: none; }
   *, *::before, *::after { animation: none !important; }
@@ -330,7 +343,7 @@ dialog.sheet { margin: 0 0 0 auto; height: 100%; max-height: 100%; width: min(44
   </header>
   <main class="main" id="view"></main>
   <footer class="footer"><div class="in">
-    <div class="about"><span class="logo"><span class="mark">🎁</span><span>gift<span style="color:var(--green)">memory</span></span></span><p class="small muted" style="margin-top:8px;max-width:340px">Remember every date, every preference and every gift, so the next one is never a repeat.</p></div>
+    <div class="about"><span class="logo"><span class="mark">🎁</span><span>gift<span style="color:var(--green)">memory</span></span></span><p class="small muted" style="margin-top:8px;max-width:340px">Remember every date, every preference and every gift, so the next one is never a repeat.</p><p class="small muted" style="margin-top:8px;max-width:340px">Emoji art: <a href="https://github.com/googlefonts/noto-emoji" style="display:inline">Google Noto Emoji</a> (Apache 2.0; animated versions CC BY 4.0).</p></div>
     <div><h4>Plan</h4><a href="#browse">Browse gifts</a><a href="#people">People</a><a href="#occasions">Occasions</a><a href="#ideas">My gift ideas</a></div>
     <div><h4>Track</h4><a href="#budget">Budget</a><a href="#history">Gift history</a><a href="#reminders">Reminders</a></div>
     <div><h4>Account</h4><a href="#account">Settings and backup</a><a href="#account">Theme</a></div>
@@ -1270,6 +1283,62 @@ dialog.sheet { margin: 0 0 0 auto; height: 100%; max-height: 100%; width: min(44
     $(login ? 'a-email' : 'a-name').focus();
   }
   (async () => { await ensureDemo(); const s = getJSON(SESSION_KEY, null); if (s?.email && users()[s.email]) startApp(s); else showAuth('login'); })();
+})();
+</script>
+<script>
+/* Replace system emoji in picture spots with Noto emoji images; animate on hover/tap. */
+(() => {
+  const ANIM = new Set(['1f30a','1f331','1f338','1f339','1f373','1f375','1f37f','1f381','1f382','1f386','1f388','1f389','1f39f','1f3b2','1f3cf','1f3e0','1f44b','1f48c','1f48d','1f48e','1f490','1f49d','1f49e','1f4a1','1f4b8','1f4bf','1f4ca','1f4da','1f4f8','1f4fa','1f50b','1f50c','1f514','1f5e3','1f634','1f64f','1f6d2','1f942','1f9c2','1fa82','1fa94','1fad6','1fad7','1faf6','2615','265f','270f','2728','2764','2b50']);
+  const STATIC = (c) => `https://cdn.jsdelivr.net/gh/googlefonts/noto-emoji@v2.047/png/128/emoji_u${c}.png`;
+  const ANIMATED = (c) => `https://fonts.gstatic.com/s/e/notoemoji/latest/${c}/512.webp`;
+  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SPOTS = '.pimg, .cat i, .occtile i, .hero .art span, .story .se, .emo, .rcard .ic, .logo .mark, .tabs a span, .boxbtn > span[aria-hidden], .owncard i';
+  const ALWAYS = '.hero .art span';
+  const EMOJI_ONLY = /^(?:\p{Extended_Pictographic}(?:️|‍\p{Extended_Pictographic})*️?\s*)+$/u;
+  const seg = (s) => s.match(/\p{Extended_Pictographic}(?:️|‍\p{Extended_Pictographic})*️?/gu) || [];
+  const code = (e) => [...e].map((ch) => ch.codePointAt(0).toString(16)).filter((x) => x !== 'fe0f').join('_');
+
+  function makeImg(e, live) {
+    const c = code(e), img = document.createElement('img');
+    img.className = 'gm-emo'; img.alt = ''; img.decoding = 'async'; img.loading = 'lazy'; img.draggable = false;
+    if (ANIM.has(c) && !reduce) img.dataset.anim = ANIMATED(c);
+    img.src = STATIC(c);
+    img.onerror = () => img.replaceWith(document.createTextNode(e));
+    if (live) play(img);
+    return img;
+  }
+  // swap to the animated file only after it has fully downloaded, so nothing blinks
+  function play(img) {
+    const url = img.dataset.anim; if (!url || img.dataset.playing) return;
+    img.dataset.playing = '1';
+    const pre = new Image(); pre.decoding = 'async';
+    pre.onload = () => { img.src = url; };
+    pre.src = url;
+  }
+  function upgrade(root) {
+    if (!root || root.nodeType !== 1) return;
+    const els = root.matches?.(SPOTS) ? [root, ...root.querySelectorAll(SPOTS)] : root.querySelectorAll(SPOTS);
+    els.forEach((el) => {
+      if (el.querySelector('img.gm-emo')) return;
+      // only plain text children that are emoji (keep <br> etc.)
+      [...el.childNodes].forEach((n) => {
+        if (n.nodeType !== 3 || !n.nodeValue.trim() || !EMOJI_ONLY.test(n.nodeValue.trim())) return;
+        const live = el.matches(ALWAYS);
+        const frag = document.createDocumentFragment();
+        seg(n.nodeValue).forEach((e) => frag.appendChild(makeImg(e, live)));
+        n.replaceWith(frag);
+      });
+    });
+  }
+  const run = () => upgrade(document.body);
+  new MutationObserver((muts) => muts.forEach((m) => m.addedNodes.forEach(upgrade))).observe(document.body, { childList: true, subtree: true });
+  run();
+  // play the animated version when a card is hovered or tapped
+  const CARDS = '.pcard, .cat, .occtile, .story, .lcard, .rcard, .logo';
+  document.addEventListener('pointerover', (ev) => {
+    const card = ev.target.closest?.(CARDS); if (!card) return;
+    card.querySelectorAll('img.gm-emo[data-anim]').forEach(play);
+  }, { passive: true });
 })();
 </script>
 </body>
