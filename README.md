@@ -1,31 +1,31 @@
-# GiftMemory – Thoughtful Gift Planner
+# GiftMemory
 
-A private planner for occasions, preferences, budgets and past gifts.
-It warns about duplicate gift ideas and upcoming occasions.
+A thoughtful gift planner: remember people's occasions, likes and dislikes, budgets and past gifts, so the next gift is never a repeat.
 
-**Live demo:** https://ramchandrappa.github.io/giftmemory/
-Coming soon: https://giftmemory.is-a.dev
-
-Demo login: `demo@giftmemory.app` / `demo123`
+**Live site:** https://YOUR-USERNAME.github.io/giftmemory/
 
 ## Features
-- Dashboard with upcoming occasions and smart reminders
-- People management with likes, dislikes and notes
-- Occasion management (birthday, anniversary, festival, wedding, farewell)
-- Gift ideas with idea → bought → given status and personalisation
-- Budget management per occasion and per year
-- Gift history with filters
-- Duplicate gift detection and dislike warnings
-- Light and dark themes, works on phone and desktop
 
-## How it works
-This version is a single `index.html` file with no build step.
-Data is saved in the visitor's own browser (localStorage), so each visitor gets a private copy.
+- People: relationships, likes, dislikes and notes
+- Occasions: birthdays, anniversaries, festivals, with yearly repeats and reminders
+- Browse gifts by category and occasion, with warnings for dislikes and repeat gifts
+- Gift box, budgets per occasion and per year, and gift history
+- Light and dark theme, works on phone and desktop
+- Backup and restore of your data
 
-The full-stack version (React, Node.js + Express, MongoDB) is in a separate project.
+## Try it
 
-## Author
-Dakshitha Sree – S-Vyasa, CSE
+Open the live site and log in with the demo account:
 
-## License
-MIT – see [LICENSE](LICENSE).
+- Email: `demo@giftmemory.app`
+- Password: `demo123`
+
+Data is stored in your browser (localStorage), so it stays on the device you use.
+
+## Run locally
+
+Download `index.html` and open it in any modern browser. No build step or server is needed.
+
+## Licence
+
+MIT, see [LICENSE](LICENSE).
