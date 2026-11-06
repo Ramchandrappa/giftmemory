@@ -1,0 +1,21 @@
+# Render Blueprint for the full-stack version in fullstack/ (the GitHub Pages site at the repo root is unaffected).
+# One free web service runs the Express API and serves the built React app.
+# Render asks for MONGODB_URI when you create the service (paste your Atlas connection string).
+services:
+  - type: web
+    name: giftmemory
+    runtime: node
+    plan: free
+    rootDir: fullstack
+    buildCommand: npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false

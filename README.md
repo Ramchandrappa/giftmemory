@@ -27,7 +27,7 @@ Emoji artwork: [Google Noto Emoji](https://github.com/googlefonts/noto-emoji) (i
 This version is a single `index.html` file with no build step.
 Data is saved in the visitor's own browser (localStorage), so each visitor gets a private copy.
 
-The full-stack version (React, Node.js + Express, MongoDB) is in a separate project.
+The full-stack version (React, Node.js + Express, MongoDB) is in the [`fullstack/`](fullstack/) folder. It stores accounts and data on a server, so the planner is the same on every device. See [fullstack/README.md](fullstack/README.md) to run or deploy it.
 
 ## Author
 Dakshitha Sree – S-Vyasa, CSE
