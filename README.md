@@ -4,6 +4,9 @@ A private planner for occasions, preferences, budgets and past gifts.
 It warns about duplicate gift ideas and upcoming occasions.
 
 **Live demo:** https://ramchandrappa.github.io/giftmemory/
+
+**Full-stack version (accounts that sync across devices):** https://giftmemory-8bos.onrender.com
+
 Coming soon: https://giftmemory.is-a.dev
 
 Demo login: `demo@giftmemory.app` / `demo123`

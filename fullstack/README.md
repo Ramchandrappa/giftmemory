@@ -6,6 +6,8 @@ It warns about duplicate gift ideas and upcoming occasions.
 This is the full-stack version, built with **React, Node.js + Express and MongoDB**.
 Accounts and data are stored on the server, so you see the same planner on every device you log in from.
 
+**Live:** https://giftmemory-8bos.onrender.com (free hosting: the first visit after 15 idle minutes takes about 50 seconds to wake up)
+
 The original single-file version (browser storage only) is live at https://ramchandrappa.github.io/giftmemory/
 
 Demo login: `demo@giftmemory.app` / `demo123`
