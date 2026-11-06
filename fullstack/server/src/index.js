@@ -12,9 +12,14 @@ async function ensureDemoUser() {
   console.log(`Demo account ready: ${DEMO.email} / ${DEMO.password}`);
 }
 
-jwtSecret(); // fail fast if production is missing JWT_SECRET
-await connectDb();
-await ensureDemoUser();
+try {
+  jwtSecret(); // fail fast if production is missing JWT_SECRET
+  await connectDb();
+  await ensureDemoUser();
+} catch (err) {
+  console.error(`Startup failed: ${err.message}`);
+  process.exit(1);
+}
 
 const port = Number(process.env.PORT) || 5000;
 createApp().listen(port, () => console.log(`GiftMemory API on http://localhost:${port}`));
